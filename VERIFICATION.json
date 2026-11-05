@@ -1,0 +1,11 @@
+{
+  "python_ast_parsed": 42,
+  "all_source_copy_hashes_match": true,
+  "credential_pattern_scan_hits_outside_tests": [],
+  "credential_test_fixture_files": [
+    "06_original_design/original_implementation/tests/test_provider.py",
+    "07_hermes_core_reference/tests/agent/test_memory_sync_redaction.py"
+  ],
+  "scan_caveat": "Pattern scan is not a guarantee of no sensitive content. Only allowlisted system files included. Existing secret-redaction test fixtures intentionally contain token-like examples.",
+  "selected_cron_jobs": 4
+}

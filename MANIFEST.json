@@ -1,0 +1,523 @@
+{
+  "created_at": "20261106-021128",
+  "files": [
+    {
+      "file": "01_current_provider/obsidian/README.md",
+      "source": "/home/hermes/.hermes/profiles/elizabeth/plugins/obsidian/README.md",
+      "kind": "source-copy",
+      "bytes": 1804,
+      "sha256": "9573a78200438eb2aecf41d578a6e2a99e4f97677baa119db49f9799e54e7ac8"
+    },
+    {
+      "file": "01_current_provider/obsidian/__init__.py",
+      "source": "/home/hermes/.hermes/profiles/elizabeth/plugins/obsidian/__init__.py",
+      "kind": "source-copy",
+      "bytes": 19072,
+      "sha256": "7d637773901ff913b4b9504d52a65ffd364c6748d1a5ce2fb8fe3bc76e529d93"
+    },
+    {
+      "file": "01_current_provider/obsidian/cli.py",
+      "source": "/home/hermes/.hermes/profiles/elizabeth/plugins/obsidian/cli.py",
+      "kind": "source-copy",
+      "bytes": 2322,
+      "sha256": "8bf33e8603942ed4cc621416ae2671b8fa9b888ed2471d0178d8ad6311c6001c"
+    },
+    {
+      "file": "01_current_provider/obsidian/config.py",
+      "source": "/home/hermes/.hermes/profiles/elizabeth/plugins/obsidian/config.py",
+      "kind": "source-copy",
+      "bytes": 5977,
+      "sha256": "17a55cd11f8e8230d89cc13ce721f23f0866634362e00e0011a85a6501c20eaa"
+    },
+    {
+      "file": "01_current_provider/obsidian/curator.py",
+      "source": "/home/hermes/.hermes/profiles/elizabeth/plugins/obsidian/curator.py",
+      "kind": "source-copy",
+      "bytes": 6910,
+      "sha256": "f72183a024421d1ff4e091e1a9bc0d5a7c4a424130d89040a98a40ac83a03d72"
+    },
+    {
+      "file": "01_current_provider/obsidian/plugin.yaml",
+      "source": "/home/hermes/.hermes/profiles/elizabeth/plugins/obsidian/plugin.yaml",
+      "kind": "source-copy",
+      "bytes": 245,
+      "sha256": "bab0dd2c7399ad99af49d50919ec0c9b65a8ac3befd4f61f8b506fcd7e722245"
+    },
+    {
+      "file": "01_current_provider/obsidian/store.py",
+      "source": "/home/hermes/.hermes/profiles/elizabeth/plugins/obsidian/store.py",
+      "kind": "source-copy",
+      "bytes": 47544,
+      "sha256": "03c8a1a580000b267bb9b5f5d272afdd57d452bb1d331f4177a03960364ae8fd"
+    },
+    {
+      "file": "02_local_memory_tree/README.md",
+      "source": "/home/hermes/Obsidian/Macidian/hermes저장소/엘리자베스/로컬 메모리 트리/README.md",
+      "kind": "source-copy",
+      "bytes": 1561,
+      "sha256": "ad8302ef5e695fc740be96899900e7987d6ff978d8695f5e8acb1208b55fbed3"
+    },
+    {
+      "file": "02_local_memory_tree/_system/memory_index.py",
+      "source": "/home/hermes/Obsidian/Macidian/hermes저장소/엘리자베스/로컬 메모리 트리/_system/memory_index.py",
+      "kind": "source-copy",
+      "bytes": 17557,
+      "sha256": "1f3cc6fcb6588b27d57ba5756634f0d46dde8f1bdd97ca32b2cdfcb450d3142d"
+    },
+    {
+      "file": "02_local_memory_tree/_system/test_memory_index.py",
+      "source": "/home/hermes/Obsidian/Macidian/hermes저장소/엘리자베스/로컬 메모리 트리/_system/test_memory_index.py",
+      "kind": "source-copy",
+      "bytes": 1852,
+      "sha256": "ad9ab03c3f4d1e342dc8b710501569e3c6a1e796d1b24e02b26f141197746b4c"
+    },
+    {
+      "file": "02_local_memory_tree/_system/로컬 메모리 시스템 v1.md",
+      "source": "/home/hermes/Obsidian/Macidian/hermes저장소/엘리자베스/로컬 메모리 트리/_system/로컬 메모리 시스템 v1.md",
+      "kind": "source-copy",
+      "bytes": 2718,
+      "sha256": "269849c329b66e309740f6744a0414603edaca1c07a1104498dcd576af513521"
+    },
+    {
+      "file": "03_automation/scripts/elizabeth_local_memory_index.sh",
+      "source": "/home/hermes/.hermes/profiles/elizabeth/scripts/elizabeth_local_memory_index.sh",
+      "kind": "source-copy",
+      "bytes": 344,
+      "sha256": "83a787716df3972e9574552b33dd5fcfdbb85f4ae0d93502f660b9810e25ec17"
+    },
+    {
+      "file": "03_automation/scripts/elizabeth_calendar_memory_collect.py",
+      "source": "/home/hermes/.hermes/profiles/elizabeth/scripts/elizabeth_calendar_memory_collect.py",
+      "kind": "source-copy",
+      "bytes": 12474,
+      "sha256": "2c1355e6e20c6f3a04fc26ab7a50704099d955b5de05e547dc9fa8ea75267ca2"
+    },
+    {
+      "file": "03_automation/scripts/elizabeth_calendar_context_pack.py",
+      "source": "/home/hermes/.hermes/profiles/elizabeth/scripts/elizabeth_calendar_context_pack.py",
+      "kind": "source-copy",
+      "bytes": 4730,
+      "sha256": "81a1f995c891ac4875456d5aea0d22805f57bbfcd37d5b2aaf938399368c585f"
+    },
+    {
+      "file": "03_automation/scripts/elizabeth_daily_note_ensure.py",
+      "source": "/home/hermes/.hermes/profiles/elizabeth/scripts/elizabeth_daily_note_ensure.py",
+      "kind": "source-copy",
+      "bytes": 4423,
+      "sha256": "916e6a8bd4335cb15830620638190a63eb3f8638e8fb79d9a53a044542511f45"
+    },
+    {
+      "file": "03_automation/memory_jobs.selected.json",
+      "source": "/home/hermes/.hermes/profiles/elizabeth/cron/jobs.json",
+      "kind": "selected-fields",
+      "bytes": 5080,
+      "sha256": "0a0b1c63084623216e46120de625660f7370ea503cb38009461956f1d31c0e58"
+    },
+    {
+      "file": "03_automation/dependencies/google_api.py",
+      "source": "/home/hermes/.hermes/profiles/elizabeth/skills/productivity/productivity-platform-operations/references/google-workspace/scripts/google_api.py",
+      "kind": "source-copy",
+      "bytes": 43428,
+      "sha256": "2b7c1ab9f1d8fa0bfd9291a267d6de52963756476c95874f1d5ece88522e8eea"
+    },
+    {
+      "file": "04_configuration/core_memory.selected.yaml",
+      "source": "/home/hermes/.hermes/profiles/elizabeth/config.yaml",
+      "kind": "selected-fields",
+      "bytes": 155,
+      "sha256": "c760c9180a359e3b5595979240344ec045637199d36d6793b897e74827c95038"
+    },
+    {
+      "file": "04_configuration/obsidian-memory.config.yaml",
+      "source": "/home/hermes/.hermes/profiles/elizabeth/obsidian-memory/config.yaml",
+      "kind": "source-copy",
+      "bytes": 488,
+      "sha256": "f805e17ebca975f6ccc4f76d1f48e96312fe7f1eebcfcce1dc0d9b7c9efbe61e"
+    },
+    {
+      "file": "04_configuration/vault-path.env.example",
+      "source": "/home/hermes/.hermes/profiles/elizabeth/.env",
+      "kind": "selected-fields",
+      "bytes": 51,
+      "sha256": "45effb37fa66ee72a349f4ec9906fb848d1979ddb4365228db914a8962cf246e"
+    },
+    {
+      "file": "05_vault_system/90_System/Memory Policy.md",
+      "source": "/home/hermes/Documents/Codex/Hermes-Memory-Vault/90_System/Memory Policy.md",
+      "kind": "source-copy",
+      "bytes": 1139,
+      "sha256": "3bb828de52d9a71a9a71252bbefb2979600f1fe70ba0d7fc50aac77f219f4f73"
+    },
+    {
+      "file": "05_vault_system/90_System/Schemas/Entity and Reflection Schema.md",
+      "source": "/home/hermes/Documents/Codex/Hermes-Memory-Vault/90_System/Schemas/Entity and Reflection Schema.md",
+      "kind": "source-copy",
+      "bytes": 554,
+      "sha256": "df0449a83917c431e4bca0c73abdbfa8e543fb6234ada0f4f34ffbc0dc14e244"
+    },
+    {
+      "file": "05_vault_system/90_System/Schemas/Memory Note Schema.md",
+      "source": "/home/hermes/Documents/Codex/Hermes-Memory-Vault/90_System/Schemas/Memory Note Schema.md",
+      "kind": "source-copy",
+      "bytes": 985,
+      "sha256": "a9638115ecc0b7caa7395e666c940e28532db592fdd123a0d52399d7d03478b2"
+    },
+    {
+      "file": "05_vault_system/90_System/Schemas/Source Note Schema.md",
+      "source": "/home/hermes/Documents/Codex/Hermes-Memory-Vault/90_System/Schemas/Source Note Schema.md",
+      "kind": "source-copy",
+      "bytes": 876,
+      "sha256": "8b320897e3341592014a20730c7ed505106ac10255e2032f414269644d25945d"
+    },
+    {
+      "file": "05_vault_system/90_System/Templates/Entity Note Template.md",
+      "source": "/home/hermes/Documents/Codex/Hermes-Memory-Vault/90_System/Templates/Entity Note Template.md",
+      "kind": "source-copy",
+      "bytes": 333,
+      "sha256": "3fd99fcadd1dcf91bdeafb3a293363b10d8ad92273a006eeb0c372c813d2d4d5"
+    },
+    {
+      "file": "05_vault_system/90_System/Templates/Memory Note Template.md",
+      "source": "/home/hermes/Documents/Codex/Hermes-Memory-Vault/90_System/Templates/Memory Note Template.md",
+      "kind": "source-copy",
+      "bytes": 651,
+      "sha256": "3a5efac98d7f421be00cf08eb9862eff57633f793ba76fafc9d0679ad7fe5b0d"
+    },
+    {
+      "file": "05_vault_system/90_System/Templates/Reflection Note Template.md",
+      "source": "/home/hermes/Documents/Codex/Hermes-Memory-Vault/90_System/Templates/Reflection Note Template.md",
+      "kind": "source-copy",
+      "bytes": 373,
+      "sha256": "2df37e41e0fcbe64b596688fd44ca373d2ece41b4899a3a73270e5271f121066"
+    },
+    {
+      "file": "05_vault_system/90_System/Templates/Source Note Template.md",
+      "source": "/home/hermes/Documents/Codex/Hermes-Memory-Vault/90_System/Templates/Source Note Template.md",
+      "kind": "source-copy",
+      "bytes": 302,
+      "sha256": "b31ccc41108b9e8b9e5438d3c4c2b51651b5746e0ebe9bff4889209303d7af42"
+    },
+    {
+      "file": "05_vault_system/90_System/Vault Manifest.md",
+      "source": "/home/hermes/Documents/Codex/Hermes-Memory-Vault/90_System/Vault Manifest.md",
+      "kind": "source-copy",
+      "bytes": 1370,
+      "sha256": "8be3df23c89729efe2acec320e1d845e494f6e30f3c8d605d37c76d752d552ab"
+    },
+    {
+      "file": "06_original_design/Obsidian-Memory-Architecture-v0.1.md",
+      "source": "/home/hermes/Documents/Codex/2026-08-14/https-share-gemini-google-jxmyjrhqeskb-https/outputs/Obsidian-Memory-Architecture-v0.1.md",
+      "kind": "source-copy",
+      "bytes": 27399,
+      "sha256": "bf1b00cb25e78dc8cb6b5dbf64ad3ff7e7600bc61b537138eb95f91f8bc018ab"
+    },
+    {
+      "file": "06_original_design/Obsidian-Memory-Provider-v0.1-Implementation.md",
+      "source": "/home/hermes/Documents/Codex/2026-08-14/https-share-gemini-google-jxmyjrhqeskb-https/outputs/Obsidian-Memory-Provider-v0.1-Implementation.md",
+      "kind": "source-copy",
+      "bytes": 2277,
+      "sha256": "4f9c547c659c12bd174f1847a942ab9add50d6fe72f35311d6bd40148856172d"
+    },
+    {
+      "file": "06_original_design/original_implementation/obsidian/README.md",
+      "source": "/home/hermes/Documents/Codex/2026-08-14/https-share-gemini-google-jxmyjrhqeskb-https/work/obsidian-memory-provider/obsidian/README.md",
+      "kind": "source-copy",
+      "bytes": 1804,
+      "sha256": "9573a78200438eb2aecf41d578a6e2a99e4f97677baa119db49f9799e54e7ac8"
+    },
+    {
+      "file": "06_original_design/original_implementation/obsidian/__init__.py",
+      "source": "/home/hermes/Documents/Codex/2026-08-14/https-share-gemini-google-jxmyjrhqeskb-https/work/obsidian-memory-provider/obsidian/__init__.py",
+      "kind": "source-copy",
+      "bytes": 19072,
+      "sha256": "7d637773901ff913b4b9504d52a65ffd364c6748d1a5ce2fb8fe3bc76e529d93"
+    },
+    {
+      "file": "06_original_design/original_implementation/obsidian/cli.py",
+      "source": "/home/hermes/Documents/Codex/2026-08-14/https-share-gemini-google-jxmyjrhqeskb-https/work/obsidian-memory-provider/obsidian/cli.py",
+      "kind": "source-copy",
+      "bytes": 2322,
+      "sha256": "8bf33e8603942ed4cc621416ae2671b8fa9b888ed2471d0178d8ad6311c6001c"
+    },
+    {
+      "file": "06_original_design/original_implementation/obsidian/config.py",
+      "source": "/home/hermes/Documents/Codex/2026-08-14/https-share-gemini-google-jxmyjrhqeskb-https/work/obsidian-memory-provider/obsidian/config.py",
+      "kind": "source-copy",
+      "bytes": 5854,
+      "sha256": "e106f4b7ecaa2ff5f7cd915511b9d8eba0a096ff7f7fabe1b12d9cf05a2ded51"
+    },
+    {
+      "file": "06_original_design/original_implementation/obsidian/curator.py",
+      "source": "/home/hermes/Documents/Codex/2026-08-14/https-share-gemini-google-jxmyjrhqeskb-https/work/obsidian-memory-provider/obsidian/curator.py",
+      "kind": "source-copy",
+      "bytes": 6910,
+      "sha256": "f72183a024421d1ff4e091e1a9bc0d5a7c4a424130d89040a98a40ac83a03d72"
+    },
+    {
+      "file": "06_original_design/original_implementation/obsidian/plugin.yaml",
+      "source": "/home/hermes/Documents/Codex/2026-08-14/https-share-gemini-google-jxmyjrhqeskb-https/work/obsidian-memory-provider/obsidian/plugin.yaml",
+      "kind": "source-copy",
+      "bytes": 245,
+      "sha256": "bab0dd2c7399ad99af49d50919ec0c9b65a8ac3befd4f61f8b506fcd7e722245"
+    },
+    {
+      "file": "06_original_design/original_implementation/obsidian/store.py",
+      "source": "/home/hermes/Documents/Codex/2026-08-14/https-share-gemini-google-jxmyjrhqeskb-https/work/obsidian-memory-provider/obsidian/store.py",
+      "kind": "source-copy",
+      "bytes": 47421,
+      "sha256": "5d91f3cc831755b9cda458e09f0269474b98a158d8af5e57440dde7a1939f6c5"
+    },
+    {
+      "file": "06_original_design/original_implementation/runtime-config.yaml",
+      "source": "/home/hermes/Documents/Codex/2026-08-14/https-share-gemini-google-jxmyjrhqeskb-https/work/obsidian-memory-provider/runtime-config.yaml",
+      "kind": "source-copy",
+      "bytes": 488,
+      "sha256": "f805e17ebca975f6ccc4f76d1f48e96312fe7f1eebcfcce1dc0d9b7c9efbe61e"
+    },
+    {
+      "file": "06_original_design/original_implementation/tests/test_provider.py",
+      "source": "/home/hermes/Documents/Codex/2026-08-14/https-share-gemini-google-jxmyjrhqeskb-https/work/obsidian-memory-provider/tests/test_provider.py",
+      "kind": "source-copy",
+      "bytes": 8914,
+      "sha256": "b02e5471e73badd048a8f387e0e3396ec54e42a04fc1ac990c63a69f5d3c7a8e"
+    },
+    {
+      "file": "07_hermes_core_reference/agent/memory_manager.py",
+      "source": "/home/hermes/.hermes/hermes-agent/agent/memory_manager.py",
+      "kind": "source-copy",
+      "bytes": 51188,
+      "sha256": "b181fbcd01bf88d6ee6a8fc2f5e4f58b3bbe58c6dfcadde00f6cea5f88405304"
+    },
+    {
+      "file": "07_hermes_core_reference/agent/memory_provider.py",
+      "source": "/home/hermes/.hermes/hermes-agent/agent/memory_provider.py",
+      "kind": "source-copy",
+      "bytes": 11965,
+      "sha256": "ac81dcf489c698891f0edebfe26845a75c50d2bde77ec3be8d7938a85c79f1fc"
+    },
+    {
+      "file": "07_hermes_core_reference/agent/memory_caller_scope.py",
+      "source": "/home/hermes/.hermes/hermes-agent/agent/memory_caller_scope.py",
+      "kind": "source-copy",
+      "bytes": 7600,
+      "sha256": "98e96ae63394a0e80d3b0b235c59a520184d64b76006f73e8954f9a71e7a7d88"
+    },
+    {
+      "file": "07_hermes_core_reference/agent/memory_manager_tools.py",
+      "source": "/home/hermes/.hermes/hermes-agent/agent/memory_manager_tools.py",
+      "kind": "source-copy",
+      "bytes": 4613,
+      "sha256": "dbd96b5e8aeae41afa6bbec48ad1a837315a268be2eedcf43c7cc609540c480d"
+    },
+    {
+      "file": "07_hermes_core_reference/agent/memory_context.py",
+      "source": "/home/hermes/.hermes/hermes-agent/agent/memory_context.py",
+      "kind": "source-copy",
+      "bytes": 8618,
+      "sha256": "3ed4a7bb2d7b5d8394e204c911c7983e4e1804a797083fffc87a071767b3851f"
+    },
+    {
+      "file": "07_hermes_core_reference/agent/agent_init_memory_provider.py",
+      "source": "/home/hermes/.hermes/hermes-agent/agent/agent_init_memory_provider.py",
+      "kind": "source-copy",
+      "bytes": 4278,
+      "sha256": "179113e7c8446c36cabea51476065608a1283d63571b71bf6607e44571e0ec30"
+    },
+    {
+      "file": "07_hermes_core_reference/plugins/memory/__init__.py",
+      "source": "/home/hermes/.hermes/hermes-agent/plugins/memory/__init__.py",
+      "kind": "source-copy",
+      "bytes": 28628,
+      "sha256": "fa7d31ac9ae103ec9afad7cfa76ab3f88e00b19379ee83cde590c3b9dfb9535e"
+    },
+    {
+      "file": "07_hermes_core_reference/plugins/memory/config_schema.py",
+      "source": "/home/hermes/.hermes/hermes-agent/plugins/memory/config_schema.py",
+      "kind": "source-copy",
+      "bytes": 4843,
+      "sha256": "eb7e5fedeb3f4412ab65491f3f58fd4e0467ceb50d41fd44ffd0876b708dfeaf"
+    },
+    {
+      "file": "07_hermes_core_reference/plugins/memory/query_rewrite.py",
+      "source": "/home/hermes/.hermes/hermes-agent/plugins/memory/query_rewrite.py",
+      "kind": "source-copy",
+      "bytes": 4679,
+      "sha256": "968aed23fd2a0d6c79866d0ed0c997be0a01b56282c37fece622d50033ca1ca4"
+    },
+    {
+      "file": "07_hermes_core_reference/tools/memory_tool.py",
+      "source": "/home/hermes/.hermes/hermes-agent/tools/memory_tool.py",
+      "kind": "source-copy",
+      "bytes": 25954,
+      "sha256": "00c86420cb4d824dbfe2806b1f748a1fc182b8c11ea2f902e8b77d3d035624dd"
+    },
+    {
+      "file": "07_hermes_core_reference/hermes_cli/memory_setup.py",
+      "source": "/home/hermes/.hermes/hermes-agent/hermes_cli/memory_setup.py",
+      "kind": "source-copy",
+      "bytes": 18474,
+      "sha256": "24601b292bf743ff0a62cb4036bc7a55ea7c2cbe1471037c2bafcbbb837923bc"
+    },
+    {
+      "file": "07_hermes_core_reference/hermes_cli/profile_memory_config.py",
+      "source": "/home/hermes/.hermes/hermes-agent/hermes_cli/profile_memory_config.py",
+      "kind": "source-copy",
+      "bytes": 3721,
+      "sha256": "28fe626570dc6b6824304f7867e6e33143036ae3e58b133c5f7fb4d55f42f65e"
+    },
+    {
+      "file": "07_hermes_core_reference/website/docs/developer-guide/memory-provider-plugin.md",
+      "source": "/home/hermes/.hermes/hermes-agent/website/docs/developer-guide/memory-provider-plugin.md",
+      "kind": "source-copy",
+      "bytes": 27919,
+      "sha256": "2185ecbe63ba0d9ae1f043e8d4a88a61056b3d1c8a83ebf9a5938a539b942c7e"
+    },
+    {
+      "file": "07_hermes_core_reference/website/docs/user-guide/features/memory.md",
+      "source": "/home/hermes/.hermes/hermes-agent/website/docs/user-guide/features/memory.md",
+      "kind": "source-copy",
+      "bytes": 32097,
+      "sha256": "979cb02df938e3bcb003195e465487aa0cdf5a3e8690ac86eb1ccd96cd69fdd4"
+    },
+    {
+      "file": "07_hermes_core_reference/website/docs/user-guide/features/memory-providers.md",
+      "source": "/home/hermes/.hermes/hermes-agent/website/docs/user-guide/features/memory-providers.md",
+      "kind": "source-copy",
+      "bytes": 47604,
+      "sha256": "07090e2c3427ccc4598cd0cf1d9132833d63d86bbfc0d2409673ef3b65702568"
+    },
+    {
+      "file": "07_hermes_core_reference/tests/agent/test_memory_write_bridge.py",
+      "source": "/home/hermes/.hermes/hermes-agent/tests/agent/test_memory_write_bridge.py",
+      "kind": "source-copy",
+      "bytes": 7137,
+      "sha256": "c93aca417b4706d3f5ff0f5cbe98de0ddedd57426e833b89dc5629198a3c2b11"
+    },
+    {
+      "file": "07_hermes_core_reference/tests/agent/test_memory_sync_redaction.py",
+      "source": "/home/hermes/.hermes/hermes-agent/tests/agent/test_memory_sync_redaction.py",
+      "kind": "source-copy",
+      "bytes": 5166,
+      "sha256": "83be688ee01d3a4a7863107864ec9eb285b0a94694ebba284b2b922b3b2f73bf"
+    },
+    {
+      "file": "07_hermes_core_reference/tests/agent/test_memory_context_dedupe.py",
+      "source": "/home/hermes/.hermes/hermes-agent/tests/agent/test_memory_context_dedupe.py",
+      "kind": "source-copy",
+      "bytes": 2444,
+      "sha256": "e598521f02644d913de7b6ebe328f0361d941800f7952e6d222a57d4bc483001"
+    },
+    {
+      "file": "07_hermes_core_reference/tests/cron/test_cron_memory_contract.py",
+      "source": "/home/hermes/.hermes/hermes-agent/tests/cron/test_cron_memory_contract.py",
+      "kind": "source-copy",
+      "bytes": 5373,
+      "sha256": "c275b31f41e2dba25e290b66dffaf93bc7e0eeac565d5f4ae88159a6e5da9f09"
+    },
+    {
+      "file": "07_hermes_core_reference/tests/plugins/memory/__init__.py",
+      "source": "/home/hermes/.hermes/hermes-agent/tests/plugins/memory/__init__.py",
+      "kind": "source-copy",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "07_hermes_core_reference/tests/plugins/memory/test_bom_tolerant_config_reads.py",
+      "source": "/home/hermes/.hermes/hermes-agent/tests/plugins/memory/test_bom_tolerant_config_reads.py",
+      "kind": "source-copy",
+      "bytes": 1724,
+      "sha256": "effd020a5f4d964eea5d0083159481f504412f18b7e986dac626f88445bc2c63"
+    },
+    {
+      "file": "07_hermes_core_reference/tests/plugins/memory/test_config_schema.py",
+      "source": "/home/hermes/.hermes/hermes-agent/tests/plugins/memory/test_config_schema.py",
+      "kind": "source-copy",
+      "bytes": 2209,
+      "sha256": "81c1cb9ec20ddece35d4d03b1db57ff8cad2ec3135bb5582c6a917cb3e1f4f62"
+    },
+    {
+      "file": "07_hermes_core_reference/tests/plugins/memory/test_disabled_provider_not_loaded.py",
+      "source": "/home/hermes/.hermes/hermes-agent/tests/plugins/memory/test_disabled_provider_not_loaded.py",
+      "kind": "source-copy",
+      "bytes": 2433,
+      "sha256": "a30ae96eb97e3665130db2e8524028ea7fbfdc612cde9d8fbfcf577f3628f89d"
+    },
+    {
+      "file": "07_hermes_core_reference/tests/plugins/memory/test_discovery_sources.py",
+      "source": "/home/hermes/.hermes/hermes-agent/tests/plugins/memory/test_discovery_sources.py",
+      "kind": "source-copy",
+      "bytes": 10171,
+      "sha256": "4e12cc7c7601b5eb2c549258b40f64a6844b696adb4e7595899ad41b739b314a"
+    },
+    {
+      "file": "07_hermes_core_reference/tests/plugins/memory/test_multiplex_memory_identity_scope.py",
+      "source": "/home/hermes/.hermes/hermes-agent/tests/plugins/memory/test_multiplex_memory_identity_scope.py",
+      "kind": "source-copy",
+      "bytes": 1831,
+      "sha256": "de5b888c38314757e765881598bc9bbd519e748af8f1403b9bf07aaf940aff02"
+    },
+    {
+      "file": "07_hermes_core_reference/tests/plugins/memory/test_provider_multiplex_contract.py",
+      "source": "/home/hermes/.hermes/hermes-agent/tests/plugins/memory/test_provider_multiplex_contract.py",
+      "kind": "source-copy",
+      "bytes": 6974,
+      "sha256": "41570939b8fb3a224674c16f60dc2c09ee0c67a4a847bb246bec119a812d25b3"
+    },
+    {
+      "file": "07_hermes_core_reference/tests/plugins/memory/test_provider_threads_inherit_profile.py",
+      "source": "/home/hermes/.hermes/hermes-agent/tests/plugins/memory/test_provider_threads_inherit_profile.py",
+      "kind": "source-copy",
+      "bytes": 2213,
+      "sha256": "9dcb6eb09cf3c676569899b7d4bccdd10a2a9020a57143994c0e86eda67b66b1"
+    },
+    {
+      "file": "07_hermes_core_reference/run_agent.py",
+      "source": "/home/hermes/.hermes/hermes-agent/run_agent.py",
+      "kind": "source-copy",
+      "bytes": 88895,
+      "sha256": "8f8df32b0a027516c11ec58221d266048d0b76157599aa3934b4348add52a643"
+    },
+    {
+      "file": "07_hermes_core_reference/REVISION.txt",
+      "source": null,
+      "kind": "generated",
+      "bytes": 158,
+      "sha256": "ffe54714dacdaec450afef0fa0b343395273f0daebb48b1034e319fbcb4616d6"
+    },
+    {
+      "file": "08_database_schemas/local_memory.schema.sql",
+      "source": "/home/hermes/Obsidian/Macidian/hermes저장소/엘리자베스/로컬 메모리 트리/_system/memory.sqlite",
+      "kind": "schema-only",
+      "bytes": 2519,
+      "sha256": "01c7a3f4d9e90cf1be0d7dbddc6beb57bc65498eb7da65813d9b685eb412e85e"
+    },
+    {
+      "file": "08_database_schemas/obsidian_provider.schema.sql",
+      "source": "/home/hermes/.hermes/profiles/elizabeth/obsidian-memory/index.sqlite3",
+      "kind": "schema-only",
+      "bytes": 3147,
+      "sha256": "0ff60d67fbbdcc577404073d8ca096b673aec222b5add222f4c89484201ea9ae"
+    },
+    {
+      "file": "REBUILD_BRIEF.md",
+      "source": null,
+      "kind": "generated",
+      "bytes": 2460,
+      "sha256": "cd626623f6e620de11185afbfdad4967b316bf4b59b9deab64a9324a863659a3"
+    },
+    {
+      "file": "README.md",
+      "source": null,
+      "kind": "generated",
+      "bytes": 1593,
+      "sha256": "240c6f2b9abcf19ee818400b93899b57d6a7e030f7f49c639297b944df5a7f4c"
+    },
+    {
+      "file": "VERIFICATION.json",
+      "source": null,
+      "kind": "generated",
+      "bytes": 536,
+      "sha256": "9e38cb575b95df1d1d316c379dcf9c24009107bf98290e601d4835993e1d0d99"
+    }
+  ]
+}

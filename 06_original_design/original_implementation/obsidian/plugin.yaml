@@ -1,0 +1,9 @@
+name: obsidian
+version: 0.1.0
+description: "Local Obsidian long-term memory with source provenance, FTS recall, and active-cache promotion."
+hooks:
+  - on_turn_start
+  - on_session_end
+  - on_session_switch
+  - on_memory_write
+  - on_delegation

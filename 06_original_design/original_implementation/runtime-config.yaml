@@ -1,0 +1,23 @@
+schema_version: 1
+vault_path: /home/hermes/Documents/Codex/Hermes-Memory-Vault
+capture:
+  enabled: true
+  include_tool_traces: true
+  large_artifact_threshold_kb: 256
+curation:
+  on_capture: true
+  max_jobs_per_turn: 4
+  redact_secrets_for_remote_models: true
+retrieval:
+  mode: lexical_graph
+  max_results: 5
+  max_tokens: 1200
+  min_confidence: 0.55
+promotion:
+  enabled: true
+  threshold: 0.78
+  memory_cache_chars: 800
+  user_cache_chars: 600
+reflection:
+  daily: true
+  weekly: true

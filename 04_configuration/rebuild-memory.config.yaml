@@ -1,0 +1,28 @@
+# Rebuilt Hybrid Memory System Configuration
+schema_version: 2
+
+# Path to the Obsidian Vault
+vault_path: /home/hermes/Documents/Codex/Hermes-Memory-Vault
+
+# Current profile (e.g., elizabeth, default)
+profile: elizabeth
+
+# Shared/Global profiles accessible across all agents
+shared_profiles:
+  - shared
+  - global
+
+# Model configurations
+models:
+  extractor_model: gpt-4o-mini
+  reflection_model: luna
+  api_key_env: OPENAI_API_KEY
+  api_base: null
+
+# Retrieval and Context Budget
+retrieval:
+  max_results: 6
+  max_tokens: 1200
+  chunk_tokens: 400
+  min_confidence: 0.5
+  include_shared: true
