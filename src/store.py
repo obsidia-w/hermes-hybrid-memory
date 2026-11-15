@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import os
 import re
 import tempfile
@@ -105,7 +106,7 @@ class MemoryStore:
                 (
                     mem_id, target_profile, mem_id, rel_path, kind, note_title, statement,
                     now_str, now_str, confidence, importance,
-                    str(meta["source_ids"]), 1 if user_locked else 0,
+                    json.dumps(meta["source_ids"], ensure_ascii=False), 1 if user_locked else 0,
                 ),
             )
             con.commit()

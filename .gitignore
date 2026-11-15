@@ -52,6 +52,7 @@ cover/
 # Environments
 .env
 .venv
+uv.lock
 env/
 venv/
 ENV/
@@ -65,6 +66,8 @@ venv.bak/
 *.db-wal
 *.db-shm
 .memory/
+demo_vault/
+test_vault/
 
 # OS / Editor specific
 .DS_Store

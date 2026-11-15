@@ -1,8 +1,14 @@
-"""Hermes Agent MemoryProvider adapter for the rebuilt hybrid memory system."""
+"""Hermes Agent MemoryProvider adapter prototype for the rebuilt hybrid memory system.
+
+Note: This module is a draft adapter interface and is NOT yet wired into
+Hermes Agent's runtime plugin loader (``MemoryProvider`` ABC, ``plugin.yaml``,
+``register()``, or ``sync_turn()`` contract).
+"""
 
 from __future__ import annotations
 
 import logging
+import os
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -47,7 +53,7 @@ MEMORY_TOOL_SCHEMA = {
 
 
 class RebuiltObsidianMemoryProvider:
-    """Zero-latency, 3-layer protected Hybrid Memory Provider for Hermes Agent."""
+    """Draft hybrid memory provider adapter (not yet auto-registered in Hermes Agent)."""
 
     def __init__(self, config: Optional[RebuildConfig] = None) -> None:
         self.config = config
@@ -79,8 +85,10 @@ class RebuiltObsidianMemoryProvider:
             if cfg_path.exists():
                 self.config = load_config(cfg_path)
             else:
-                vault_path = Path.home() / "Documents" / "Codex" / "Hermes-Memory-Vault"
-                self.config = RebuildConfig(vault_path=vault_path)
+                env_vault = os.environ.get("HERMES_MEMORY_VAULT")
+                vault_path = Path(env_vault).expanduser().resolve() if env_vault else (Path.home() / "Hermes-Memory-Vault")
+                profile = os.environ.get("HERMES_MEMORY_PROFILE", "default")
+                self.config = RebuildConfig(vault_path=vault_path, profile=profile)
 
         db_path = self.config.db_path or (self.config.vault_path / ".memory" / "index.sqlite3")
         self.db = DatabaseManager(db_path)

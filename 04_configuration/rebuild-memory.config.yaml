@@ -1,11 +1,14 @@
-# Rebuilt Hybrid Memory System Configuration
+# Example Configuration for Rebuilt Hybrid Memory System (v2.0 CLI Engine)
+# Copy or edit these values for your local environment, or override at runtime
+# via CLI flags (--vault, --profile) or environment variables
+# (HERMES_MEMORY_VAULT, HERMES_MEMORY_PROFILE).
 schema_version: 2
 
-# Path to the Obsidian Vault
-vault_path: /home/hermes/Documents/Codex/Hermes-Memory-Vault
+# Example local Vault path (replace with your Obsidian Vault path, e.g. ~/Documents/MyVault)
+vault_path: ./demo_vault
 
-# Current profile (e.g., elizabeth, default)
-profile: elizabeth
+# Example active profile (e.g., default, personal, work)
+profile: default
 
 # Shared/Global profiles accessible across all agents
 shared_profiles:
@@ -13,6 +16,8 @@ shared_profiles:
   - global
 
 # Model configurations
+# NOTE: extractor_model is used only when the API key env var is set (otherwise local fallback runs).
+#       reflection_model is a configuration placeholder; automated reflection cron is not implemented yet.
 models:
   extractor_model: gpt-4o-mini
   reflection_model: luna

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
 from typing import List, Optional
@@ -16,22 +17,32 @@ from .retriever import HybridRetriever
 from .store import MemoryStore
 
 
-def get_system(config_path: Optional[str] = None, vault_path: Optional[str] = None):
-    # Auto-find config or create default
+def get_system(
+    config_path: Optional[str] = None,
+    vault_path: Optional[str] = None,
+    profile: Optional[str] = None,
+):
     default_cfg = Path("04_configuration/rebuild-memory.config.yaml")
-    if not config_path and default_cfg.exists():
-        cfg_file = default_cfg
-    elif config_path:
+    if config_path:
         cfg_file = Path(config_path)
+        if not cfg_file.is_file():
+            raise FileNotFoundError(f"Configuration file not found: {cfg_file}")
+    elif default_cfg.is_file():
+        cfg_file = default_cfg
     else:
-        # Default fallback
         cfg_file = None
 
-    if cfg_file and cfg_file.exists():
-        config = load_config(cfg_file, vault_override=vault_path)
+    if cfg_file is not None:
+        config = load_config(cfg_file, vault_override=vault_path, profile_override=profile)
     else:
-        vault = Path(vault_path or "./test_vault").resolve()
-        config = RebuildConfig(vault_path=vault, db_path=vault / ".memory" / "index.sqlite3")
+        vault_val = vault_path or os.environ.get("HERMES_MEMORY_VAULT") or "./demo_vault"
+        profile_val = profile or os.environ.get("HERMES_MEMORY_PROFILE") or "default"
+        vault = Path(vault_val).expanduser().resolve()
+        config = RebuildConfig(
+            vault_path=vault,
+            profile=profile_val,
+            db_path=vault / ".memory" / "index.sqlite3",
+        )
 
     db_path = config.db_path or (config.vault_path / ".memory" / "index.sqlite3")
     db = DatabaseManager(db_path)
@@ -44,7 +55,7 @@ def get_system(config_path: Optional[str] = None, vault_path: Optional[str] = No
 
 
 def cmd_reindex(args: argparse.Namespace) -> int:
-    config, db, store, indexer, retriever, extractor = get_system(args.config, args.vault)
+    config, db, store, indexer, retriever, extractor = get_system(args.config, args.vault, args.profile)
     print(f"[*] Reindexing vault: {config.vault_path} (Profile: {config.profile})")
     stats = indexer.index_all()
     print("[+] Reindex complete:")
@@ -53,7 +64,7 @@ def cmd_reindex(args: argparse.Namespace) -> int:
 
 
 def cmd_search(args: argparse.Namespace) -> int:
-    config, db, store, indexer, retriever, extractor = get_system(args.config, args.vault)
+    config, db, store, indexer, retriever, extractor = get_system(args.config, args.vault, args.profile)
     print(f"[*] Searching for '{args.query}'...")
     res = retriever.retrieve(args.query, max_tokens=args.max_tokens)
     print(f"[+] Found {res['memories_count']} memories, {res['chunks_count']} chunks ({res['tokens_est']} tokens)")
@@ -63,7 +74,7 @@ def cmd_search(args: argparse.Namespace) -> int:
 
 
 def cmd_remember(args: argparse.Namespace) -> int:
-    config, db, store, indexer, retriever, extractor = get_system(args.config, args.vault)
+    config, db, store, indexer, retriever, extractor = get_system(args.config, args.vault, args.profile)
     mem_id = store.remember(
         statement=args.statement,
         kind=args.kind,
@@ -75,7 +86,7 @@ def cmd_remember(args: argparse.Namespace) -> int:
 
 
 def cmd_correct(args: argparse.Namespace) -> int:
-    config, db, store, indexer, retriever, extractor = get_system(args.config, args.vault)
+    config, db, store, indexer, retriever, extractor = get_system(args.config, args.vault, args.profile)
     new_id = store.correct(
         old_memory_id=args.old_id,
         new_statement=args.new_statement,
@@ -85,8 +96,23 @@ def cmd_correct(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_capture(args: argparse.Namespace) -> int:
+    config, db, store, indexer, retriever, extractor = get_system(args.config, args.vault, args.profile)
+    job_id = extractor.capture_turn(
+        session_id=args.session_id,
+        turn_number=args.turn,
+        user_text=args.user,
+        assistant_text=args.assistant,
+    )
+    if job_id is None:
+        print("[!] Turn skipped by secret/injection guard (no job enqueued).")
+    else:
+        print(f"[+] Turn captured and queued for extraction. Job ID: {job_id}")
+    return 0
+
+
 def cmd_process_jobs(args: argparse.Namespace) -> int:
-    config, db, store, indexer, retriever, extractor = get_system(args.config, args.vault)
+    config, db, store, indexer, retriever, extractor = get_system(args.config, args.vault, args.profile)
     print("[*] Processing background extraction jobs...")
     results = extractor.process_pending_jobs(limit=args.limit)
     print(f"[+] Processed {len(results)} jobs:")
@@ -95,7 +121,7 @@ def cmd_process_jobs(args: argparse.Namespace) -> int:
 
 
 def cmd_status(args: argparse.Namespace) -> int:
-    config, db, store, indexer, retriever, extractor = get_system(args.config, args.vault)
+    config, db, store, indexer, retriever, extractor = get_system(args.config, args.vault, args.profile)
     with db.get_connection() as con:
         cur = con.cursor()
         cur.execute("SELECT count(*) as c FROM memories WHERE status = 'active'")
@@ -105,11 +131,11 @@ def cmd_status(args: argparse.Namespace) -> int:
         cur.execute("SELECT count(*) as c FROM jobs WHERE status = 'pending'")
         pending_jobs = cur.fetchone()["c"]
 
-    print(f"=== Memory System Status ===")
+    print("=== Memory System Status ===")
     print(f"Vault: {config.vault_path}")
     print(f"Profile: {config.profile} (Shared: {config.shared_profiles})")
     print(f"Extractor Model: {config.models.extractor_model}")
-    print(f"Reflection Model: {config.models.reflection_model}")
+    print(f"Reflection Model: {config.models.reflection_model} (config placeholder; worker not yet implemented)")
     print(f"Active Memories: {active_mems}")
     print(f"Document Chunks: {total_chunks}")
     print(f"Pending Jobs in Queue: {pending_jobs}")
@@ -119,7 +145,8 @@ def cmd_status(args: argparse.Namespace) -> int:
 def main(argv: Optional[List[str]] = None) -> int:
     parser = argparse.ArgumentParser(description="Rebuilt Hybrid Memory System CLI")
     parser.add_argument("--config", help="Path to config.yaml")
-    parser.add_argument("--vault", help="Override vault path")
+    parser.add_argument("--vault", help="Override vault path (or set HERMES_MEMORY_VAULT)")
+    parser.add_argument("--profile", help="Override profile name (or set HERMES_MEMORY_PROFILE)")
 
     sub = parser.add_subparsers(dest="command", required=True)
 
@@ -134,7 +161,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     # search
     p_search = sub.add_parser("search", help="Search memories and documents")
     p_search.add_argument("query", help="Search query")
-    p_search.add_argument("--max-tokens", type=int, default=1200, help="Max tokens budget")
+    p_search.add_argument("--max-tokens", type=int, default=None, help="Max tokens budget")
     p_search.set_defaults(func=cmd_search)
 
     # remember
@@ -151,6 +178,14 @@ def main(argv: Optional[List[str]] = None) -> int:
     p_corr.add_argument("new_statement", help="New corrected statement")
     p_corr.add_argument("--reason", help="Audit reason")
     p_corr.set_defaults(func=cmd_correct)
+
+    # capture
+    p_cap = sub.add_parser("capture", help="Capture a dialogue turn into the async extraction queue")
+    p_cap.add_argument("--user", required=True, help="User turn text")
+    p_cap.add_argument("--assistant", default="", help="Assistant turn text")
+    p_cap.add_argument("--session-id", default="cli-demo", help="Session ID")
+    p_cap.add_argument("--turn", type=int, default=1, help="Turn number")
+    p_cap.set_defaults(func=cmd_capture)
 
     # process-jobs
     p_jobs = sub.add_parser("process-jobs", help="Process queued extraction jobs")

@@ -6,7 +6,8 @@ import tempfile
 from pathlib import Path
 import pytest
 
-from src.config import RebuildConfig
+from src.cli import main as cli_main
+from src.config import RebuildConfig, load_config
 from src.db import DatabaseManager
 from src.extractor import AsynchronousExtractor
 from src.indexer import UnifiedIndexer
@@ -105,7 +106,7 @@ def test_hybrid_indexing_and_retrieval(isolated_env):
         kind="constraint",
     )
     store.remember(
-        statement="프로젝트 루트 경로는 /home/hermes/Codex/Rebuild 이다.",
+        statement="프로젝트 루트 경로는 /example/workspace/hermes-hybrid-memory 이다.",
         kind="fact",
     )
 
@@ -186,3 +187,110 @@ def test_secret_filtering(isolated_env):
     )
     # Must be blocked from being enqueued
     assert job_id is None
+
+
+def test_korean_particle_and_partial_match_retrieval(isolated_env):
+    vault = isolated_env["vault"]
+    store = isolated_env["store"]
+    indexer = isolated_env["indexer"]
+    retriever = isolated_env["retriever"]
+
+    # Stored with Korean particles and compound words
+    store.remember(
+        statement="로컬 저장소로 SQLite를 사용한다.",
+        kind="decision",
+        title="저장소 선택",
+    )
+    store.remember(
+        statement="비동기큐설계 원칙에 따라 백그라운드 처리를 분리한다.",
+        kind="insight",
+        title="큐 처리 원칙",
+    )
+    store.remember(
+        statement="Python 환경에서 테스트를 실행한다.",
+        kind="fact",
+        title="실행 환경",
+    )
+
+    docs_dir = vault / "Projects"
+    docs_dir.mkdir(parents=True, exist_ok=True)
+    (docs_dir / "Search-Notes.md").write_text(
+        "# 검색 노트\n## 한국어검색\nSQLite 기반 데이터베이스설계를 문서화한다.\n",
+        encoding="utf-8",
+    )
+    indexer.index_all()
+
+    # 1. Base keyword matches stored token with attached particle ("SQLite를") without duplicating chunks
+    res_base = retriever.retrieve("SQLite")
+    assert res_base["memories_count"] == 1
+    assert res_base["chunks_count"] == 1
+    assert "SQLite를" in res_base["formatted_context"]
+    assert res_base["formatted_context"].count("Projects/Search-Notes.md > 한국어검색") == 1
+
+    # 2. Query with attached particle ("Python으로") matches stored base token ("Python")
+    res_particle_query = retriever.retrieve("Python으로")
+    assert "Python 환경" in res_particle_query["formatted_context"]
+
+    # 3. Partial substring inside Korean compound word ("비동기큐설계" -> "큐", "설계")
+    res_partial_mem = retriever.retrieve("비동기큐")
+    assert "비동기큐설계" in res_partial_mem["formatted_context"]
+
+    res_partial_chunk = retriever.retrieve("설계")
+    assert "데이터베이스설계를" in res_partial_chunk["formatted_context"]
+
+
+def test_user_manual_section_preserved_on_correct(isolated_env):
+    vault = isolated_env["vault"]
+    store = isolated_env["store"]
+
+    mem_1 = store.remember(
+        statement="초기 배포 방식은 단일 스크립트 실행이다.",
+        kind="decision",
+        title="배포 방식",
+    )
+    with isolated_env["db"].get_connection() as con:
+        row = con.execute("SELECT path FROM memories WHERE id = ?", (mem_1,)).fetchone()
+    old_file = vault / row["path"]
+    old_file.write_text(
+        old_file.read_text(encoding="utf-8") + "\n## 사용자 수동 메모\n- 운영 서버 점검 시간은 매주 일요일 03:00\n",
+        encoding="utf-8",
+    )
+
+    mem_2 = store.correct(mem_1, "배포 방식은 CLI와 테스트 통과 후 수동 배포로 변경한다.", reason="정책 변경")
+    with isolated_env["db"].get_connection() as con:
+        row2 = con.execute("SELECT path FROM memories WHERE id = ?", (mem_2,)).fetchone()
+    new_text = (vault / row2["path"]).read_text(encoding="utf-8")
+    assert "운영 서버 점검 시간은 매주 일요일 03:00" in new_text
+
+
+def test_config_override_and_cli_roundtrip(tmp_path, monkeypatch):
+    cfg_file = tmp_path / "config.yaml"
+    cfg_file.write_text(
+        "schema_version: 2\nvault_path: ./ignored_default\nprofile: default\n",
+        encoding="utf-8",
+    )
+    custom_vault = tmp_path / "custom_vault"
+    monkeypatch.setenv("HERMES_MEMORY_VAULT", str(custom_vault))
+    monkeypatch.setenv("HERMES_MEMORY_PROFILE", "sandbox")
+
+    cfg = load_config(cfg_file)
+    assert cfg.vault_path == custom_vault.resolve()
+    assert cfg.profile == "sandbox"
+
+    # Explicit missing config file must fail instead of falling back silently
+    with pytest.raises(FileNotFoundError):
+        cli_main(["--config", str(tmp_path / "missing.yaml"), "status"])
+
+    # CLI end-to-end smoke flow on an isolated temporary vault
+    cli_vault = tmp_path / "cli_vault"
+    assert cli_main(["--vault", str(cli_vault), "--profile", "demo", "status"]) == 0
+    assert cli_main([
+        "--vault", str(cli_vault), "--profile", "demo",
+        "remember", "로컬 환경에서 SQLite를 기본 저장소로 사용한다.", "--kind", "decision",
+    ]) == 0
+    assert cli_main([
+        "--vault", str(cli_vault), "--profile", "demo",
+        "capture", "--user", "앞으로는 테스트 없이 commit 하지 말아줘.", "--assistant", "알겠습니다.",
+    ]) == 0
+    assert cli_main(["--vault", str(cli_vault), "--profile", "demo", "process-jobs"]) == 0
+    assert cli_main(["--vault", str(cli_vault), "--profile", "demo", "search", "SQLite"]) == 0

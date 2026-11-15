@@ -10,14 +10,60 @@ from .config import RebuildConfig
 from .db import DatabaseManager
 from .indexer import estimate_tokens
 
+KOREAN_PARTICLES = (
+    "에서는", "에서도", "으로는", "으로도", "에게는", "에게도", "한테는", "한테도",
+    "에서", "에게", "한테", "으로", "부터", "까지", "처럼", "보다", "이나", "이랑", "하고",
+    "은", "는", "이", "가", "을", "를", "의", "에", "로", "와", "과", "도", "만", "랑", "나",
+)
+
+
+def extract_search_tokens(query: str) -> List[str]:
+    """Extract normalized search tokens while preserving input order."""
+    cleaned = re.sub(r"[^\w\s\uac00-\ud7a3]", " ", query or "")
+    seen: set[str] = set()
+    tokens: List[str] = []
+    for raw in cleaned.split():
+        tok = raw.strip()
+        if tok and tok.lower() not in seen:
+            seen.add(tok.lower())
+            tokens.append(tok)
+    return tokens
+
+
+def strip_korean_particle(token: str) -> Optional[str]:
+    """Strip a trailing Korean particle when the remaining stem has length >= 2."""
+    for particle in KOREAN_PARTICLES:
+        if token.endswith(particle) and len(token) - len(particle) >= 2:
+            return token[: -len(particle)]
+    return None
+
+
+def expand_search_terms(query: str) -> List[str]:
+    """Expand tokens with particle-stripped stems for recall."""
+    seen: set[str] = set()
+    terms: List[str] = []
+    for tok in extract_search_tokens(query):
+        for candidate in (tok, strip_korean_particle(tok)):
+            if candidate and candidate.lower() not in seen:
+                seen.add(candidate.lower())
+                terms.append(candidate)
+    return terms
+
+
+def _escape_like(term: str) -> str:
+    return term.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+
 
 def escape_fts_query(query: str) -> str:
-    """Escapes punctuation and operators for SQLite FTS5 syntax."""
-    cleaned = re.sub(r'[^\w\s\uac00-\ud7a3]', " ", query)
-    tokens = [t.strip() for t in cleaned.split() if t.strip()]
-    if not tokens:
+    """Build an FTS5 query with exact, prefix, and Korean particle-stripped terms."""
+    terms = expand_search_terms(query)
+    if not terms:
         return '""'
-    return " OR ".join(f'"{t}"' for t in tokens)
+    clauses = []
+    for t in terms:
+        escaped = t.replace('"', '""')
+        clauses.append(f'"{escaped}" OR "{escaped}"*')
+    return " OR ".join(clauses)
 
 
 class HybridRetriever:
@@ -40,12 +86,15 @@ class HybridRetriever:
 
         # 1. High-Priority Constraints & Active Preferences (Must-Have context)
         constraints = self._get_high_priority_rules(allowed_profiles)
-        
-        # 2. Atomic Memories via FTS5
-        memories = self._search_memories(query, allowed_profiles, limit=5)
-        
-        # 3. Knowledge Document Chunks via FTS5
-        chunks = self._search_chunks(query, allowed_profiles, limit=3)
+
+        memory_limit = max(1, self.config.retrieval.max_results)
+        chunk_limit = max(1, min(3, memory_limit))
+
+        # 2. Atomic Memories via FTS5 + substring fallback
+        memories = self._search_memories(query, allowed_profiles, limit=memory_limit)
+
+        # 3. Knowledge Document Chunks via FTS5 + substring fallback
+        chunks = self._search_chunks(query, allowed_profiles, limit=chunk_limit)
 
         # 4. Pack into formatted context packet obeying token budget
         context_packet = self._pack_context(
@@ -109,13 +158,29 @@ class HybridRetriever:
                     """,
                     (fts_query, *allowed_profiles, limit),
                 )
-                rows = cur.fetchall()
+                results = [dict(r) for r in cur.fetchall()]
             except sqlite3.OperationalError:
-                rows = []
+                results = []
+
+            if len(results) < limit:
+                seen_ids = {r["id"] for r in results}
+                fallback = self._like_fallback_query(
+                    con=con,
+                    query=query,
+                    table="memories",
+                    select_cols="id, kind, title, statement, importance, confidence, profile",
+                    search_cols=("title", "statement", "kind"),
+                    allowed_profiles=allowed_profiles,
+                    exclude_ids=seen_ids,
+                    limit=limit - len(results),
+                    extra_where="status = 'active'",
+                    has_confidence=True,
+                )
+                results.extend(fallback)
 
             # Update recall count for retrieved memories
-            if rows:
-                ids = [r["id"] for r in rows]
+            if results:
+                ids = [r["id"] for r in results]
                 id_placeholders = ",".join("?" for _ in ids)
                 con.execute(
                     f"""
@@ -127,7 +192,7 @@ class HybridRetriever:
                 )
                 con.commit()
 
-            return [dict(r) for r in rows]
+            return results
 
     def _search_chunks(
         self, query: str, allowed_profiles: tuple, limit: int = 3
@@ -142,7 +207,7 @@ class HybridRetriever:
             try:
                 cur.execute(
                     f"""
-                    SELECT c.id, c.doc_path, c.heading, c.content, c.tags,
+                    SELECT c.id, c.doc_path, c.heading, c.content, c.tags, c.importance,
                            bm25(chunks_fts) as rank
                     FROM chunks_fts f
                     JOIN chunks c ON c.id = f.chunk_id
@@ -153,9 +218,89 @@ class HybridRetriever:
                     """,
                     (fts_query, *allowed_profiles, limit),
                 )
-                return [dict(r) for r in cur.fetchall()]
+                results = [dict(r) for r in cur.fetchall()]
             except sqlite3.OperationalError:
-                return []
+                results = []
+
+            if len(results) < limit:
+                seen_ids = {int(r["id"]) for r in results}
+                fallback = self._like_fallback_query(
+                    con=con,
+                    query=query,
+                    table="chunks",
+                    select_cols="id, doc_path, heading, content, tags, importance",
+                    search_cols=("heading", "content", "tags"),
+                    allowed_profiles=allowed_profiles,
+                    exclude_ids=seen_ids,
+                    limit=limit - len(results),
+                )
+                results.extend(fallback)
+
+            return results
+
+    def _like_fallback_query(
+        self,
+        con: sqlite3.Connection,
+        query: str,
+        table: str,
+        select_cols: str,
+        search_cols: tuple[str, ...],
+        allowed_profiles: tuple,
+        exclude_ids: set[Any],
+        limit: int,
+        extra_where: str = "",
+        has_confidence: bool = False,
+    ) -> List[Dict[str, Any]]:
+        tokens = extract_search_tokens(query)
+        terms = expand_search_terms(query)[:20]
+        if not terms or limit <= 0:
+            return []
+
+        profile_placeholders = ",".join("?" for _ in allowed_profiles)
+        per_term_expr = "(" + " OR ".join(f"{col} LIKE ? ESCAPE '\\'" for col in search_cols) + ")"
+        like_clauses = " OR ".join(per_term_expr for _ in terms)
+        like_params: List[Any] = []
+        for term in terms:
+            pat = f"%{_escape_like(term)}%"
+            like_params.extend([pat] * len(search_cols))
+
+        where_parts: List[str] = []
+        params: List[Any] = []
+        if extra_where:
+            where_parts.append(extra_where)
+
+        where_parts.append(f"profile IN ({profile_placeholders})")
+        params.extend(allowed_profiles)
+
+        if exclude_ids:
+            ex_placeholders = ",".join("?" for _ in exclude_ids)
+            where_parts.append(f"id NOT IN ({ex_placeholders})")
+            params.extend(exclude_ids)
+
+        where_parts.append(f"({like_clauses})")
+        params.extend(like_params)
+
+        cur = con.cursor()
+        cur.execute(
+            f"SELECT {select_cols} FROM {table} WHERE {' AND '.join(where_parts)}",
+            params,
+        )
+        candidates = [dict(r) for r in cur.fetchall()]
+        tok_lowers = [t.lower() for t in tokens]
+        term_lowers = [t.lower() for t in terms]
+
+        def score(row: Dict[str, Any]) -> tuple:
+            hay = " ".join(str(row[c]) for c in search_cols).lower()
+            exact_hits = sum(1 for t in tok_lowers if t in hay)
+            term_hits = sum(1 for t in term_lowers if t in hay)
+            conf = row.get("confidence", 0.0) if has_confidence else 0.0
+            return (-exact_hits, -term_hits, -row["importance"], -conf, row["id"])
+
+        candidates.sort(key=score)
+        selected = candidates[:limit]
+        for row in selected:
+            row["rank"] = 0.0
+        return selected
 
     def _pack_context(
         self,

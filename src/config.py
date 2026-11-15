@@ -61,7 +61,11 @@ class RebuildConfig:
         return [self.vault_path / "20_Memories" / p for p in self.shared_profiles]
 
 
-def load_config(config_path: Path | str, vault_override: Optional[Path | str] = None) -> RebuildConfig:
+def load_config(
+    config_path: Path | str,
+    vault_override: Optional[Path | str] = None,
+    profile_override: Optional[str] = None,
+) -> RebuildConfig:
     path = Path(config_path).expanduser().resolve()
     if not path.is_file():
         raise FileNotFoundError(f"Configuration file not found: {path}")
@@ -69,9 +73,13 @@ def load_config(config_path: Path | str, vault_override: Optional[Path | str] = 
     with path.open("r", encoding="utf-8") as f:
         raw: Dict[str, Any] = yaml.safe_load(f) or {}
 
-    vault_val = vault_override or raw.get("vault_path") or os.environ.get("HERMES_MEMORY_VAULT")
+    vault_val = vault_override or os.environ.get("HERMES_MEMORY_VAULT") or raw.get("vault_path")
     if not vault_val:
         raise ValueError("vault_path must be configured in config file, parameter, or HERMES_MEMORY_VAULT env")
+
+    profile_val = str(
+        profile_override or os.environ.get("HERMES_MEMORY_PROFILE") or raw.get("profile", "default")
+    )
 
     models_raw = raw.get("models", {})
     models = ModelConfig(
@@ -90,12 +98,12 @@ def load_config(config_path: Path | str, vault_override: Optional[Path | str] = 
         include_shared=retrieval_raw.get("include_shared", True),
     )
 
-    db_path_val = raw.get("db_path")
+    db_path_val = os.environ.get("HERMES_MEMORY_DB") or raw.get("db_path")
     db_path = Path(db_path_val).expanduser().resolve() if db_path_val else None
 
     return RebuildConfig(
         vault_path=Path(vault_val).expanduser().resolve(),
-        profile=str(raw.get("profile", "default")),
+        profile=profile_val,
         shared_profiles=list(raw.get("shared_profiles", ["shared", "global"])),
         models=models,
         retrieval=retrieval,

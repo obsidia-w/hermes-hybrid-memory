@@ -113,7 +113,7 @@ class UnifiedIndexer:
                 if not mem_dir.exists():
                     continue
                 for path in mem_dir.rglob("*.md"):
-                    if path.name.startswith("."):
+                    if any(part.startswith(".") for part in path.relative_to(mem_dir).parts):
                         continue
                     stats["files_scanned"] += 1
                     try:
@@ -128,9 +128,9 @@ class UnifiedIndexer:
             seen_chunk_hashes = set()
             vault = self.config.vault_path
             for path in vault.rglob("*.md"):
-                if path.name.startswith("."):
-                    continue
                 rel_parts = path.relative_to(vault).parts
+                if any(part.startswith(".") for part in rel_parts):
+                    continue
                 if "20_Memories" in rel_parts or "90_System" in rel_parts:
                     continue  # skip atomic memories and raw templates
 
@@ -234,6 +234,18 @@ class UnifiedIndexer:
                     profile, rel_path, b["heading"], b["level"], content, tags,
                     tokens_est, chunk_hash, now_str, now_str,
                 ),
+            )
+
+        if hashes:
+            placeholders = ",".join("?" for _ in hashes)
+            con.execute(
+                f"DELETE FROM chunks WHERE doc_path = ? AND profile = ? AND hash NOT IN ({placeholders})",
+                (rel_path, profile, *hashes),
+            )
+        else:
+            con.execute(
+                "DELETE FROM chunks WHERE doc_path = ? AND profile = ?",
+                (rel_path, profile),
             )
 
         return hashes
